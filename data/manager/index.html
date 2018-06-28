@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ZIP Manager</title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+
+  <body>
+    <header>
+      <div data-cmd="open">
+        <img src="images/open.svg">
+        <span>Open</span>
+      </div>
+      <div data-cmd="extract">
+        <img src="images/extract.svg">
+        <span>Extract</span>
+      </div>
+    </header>
+    <main>
+      <table>
+        <colgroup>
+          <col>
+          <col width=10%>
+          <col width=20% align="right">
+          <col width=20%>
+        </colgroup>
+        <thead>
+          <tr>
+            <th data-id=name>Name</th>
+            <th data-id="size">Size</th>
+            <th data-id="date">Date Modified</th>
+            <th data-id="kind">Kind</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </main>
+    <div id="log" data-visible=false>
+      <div>
+        <input type="button" value="×" data-cmd="hide.log">
+      </div>
+      <ul></ul>
+    </div>
+    <footer></footer>
+
+    <script type=module src="index.js"></script>
+    <script async src="commands.js"></script>
+    <script async src="unload.js"></script>
+  </body>
+</html>
