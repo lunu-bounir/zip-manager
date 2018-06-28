@@ -101,11 +101,15 @@ main th:nth-child(2),
 main td:nth-child(2) {
   text-align: right;
 }
+main th:nth-child(3),
+main td:nth-child(3) {
+  text-align: center;
+}
 main tr:nth-child(even) {
   background-color: #f5f5f5;
 }
 main tr[data-directory=true] {
-  font-weight: bold;
+  opacity: 0.5;
   pointer-events: none;
 }
 main tr[data-selected=true] {

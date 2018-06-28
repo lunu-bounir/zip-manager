@@ -8,11 +8,11 @@
 
   <body>
     <header>
-      <div data-cmd="open">
+      <div data-cmd="open" title="Browse to open a local ZIP archive">
         <img src="images/open.svg">
         <span>Open</span>
       </div>
-      <div data-cmd="extract">
+      <div data-cmd="extract" title="Extract all or selected files. Use Ctrl or Command key to select the destination directory">
         <img src="images/extract.svg">
         <span>Extract</span>
       </div>
@@ -24,6 +24,7 @@
           <col width=10%>
           <col width=20% align="right">
           <col width=20%>
+          <col width=10%>
         </colgroup>
         <thead>
           <tr>
@@ -31,6 +32,7 @@
             <th data-id="size">Size</th>
             <th data-id="date">Date Modified</th>
             <th data-id="kind">Kind</th>
+            <th data-id="parent">Parent</th>
           </tr>
         </thead>
         <tbody></tbody>

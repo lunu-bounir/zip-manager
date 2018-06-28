@@ -7,7 +7,6 @@ const require = src => new Promise(resolve => {
   s.src = src;
   s.onload = () => {
     resolve();
-    console.log(src);
     document.documentElement.removeChild(s);
   };
   document.documentElement.appendChild(s);

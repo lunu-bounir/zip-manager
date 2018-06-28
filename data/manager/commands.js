@@ -1,12 +1,13 @@
 /* globals api */
 'use strict';
 
-var download = entry => new Promise(resolve => api.zip.get(entry).then(blob => {
+var download = (entry, saveAs = false) => new Promise(resolve => api.zip.get(entry).then(blob => {
   const url = URL.createObjectURL(blob);
   chrome.runtime.sendMessage({
     method: 'download',
     url,
-    filename: entry.filename
+    filename: entry.filename,
+    saveAs
   }, e => {
     if (e) {
       api.toolbar.log.add(e + ' -> ' + entry.filename);
@@ -23,15 +24,15 @@ document.querySelector('table tbody').addEventListener('dblclick', ({target}) =>
   }
 });
 
-document.addEventListener('click', async({target}) => {
-  const cmd = target.dataset.cmd;
+document.addEventListener('click', async e => {
+  const cmd = e.target.dataset.cmd;
 
   if (cmd === 'extract') {
     const entries = api.table.entries();
 
     const chunk = 4;
     for (let i = 0, j = entries.length; i < j; i += chunk) {
-      await Promise.all(entries.slice(i, i + chunk).map(download));
+      await Promise.all(entries.slice(i, i + chunk).map(entry => download(entry, e.metaKey)));
     }
   }
   else if (cmd === 'open') {
