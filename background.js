@@ -70,7 +70,7 @@ chrome.browserAction.onClicked.addListener(() => onCommand());
         id: 'link.zip',
         title: 'Open with ZIP Manager',
         contexts: ['link'],
-        targetUrlPatterns: ['*://*/*.zip*']
+        targetUrlPatterns: ['*://*/*.zip*', '*://*/*.ZIP*']
       });
     });
   };

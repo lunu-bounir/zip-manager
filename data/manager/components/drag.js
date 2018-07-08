@@ -5,14 +5,18 @@ drag.callbacks = {
   'drop': []
 };
 
-function handleDragStart(e) {
-  e.target.style.opacity = '0.4';
-}
-
 function handleDragOver(e) {
   e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
-  return false;
+
+  if (e.dataTransfer.types) {
+    for (let i = 0; i < e.dataTransfer.types.length; i++) {
+      if (e.dataTransfer.types[i] === 'Files') {
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+      }
+    }
+  }
+  e.dataTransfer.dropEffect = 'none';
 }
 
 function handleDragEnter(e) {
@@ -26,8 +30,12 @@ function handleDragLeave(e) {
 function handleDrop(e) {
   e.stopPropagation();
   e.preventDefault();
-  const files = [...e.dataTransfer.files];
-  drag.callbacks.drop.forEach(c => c(files));
+
+  if (e.dataTransfer.getData('text') !== 'self') {
+    const files = [...e.dataTransfer.files];
+    drag.callbacks.drop.forEach(c => c(files));
+  }
+
   return false;
 }
 
@@ -36,7 +44,6 @@ function handleDragEnd(e) {
 }
 
 drag.add = element => {
-  element.addEventListener('dragstart', handleDragStart, false);
   element.addEventListener('dragenter', handleDragEnter, false);
   element.addEventListener('dragover', handleDragOver, false);
   element.addEventListener('dragleave', handleDragLeave, false);

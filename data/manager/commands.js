@@ -1,20 +1,16 @@
 /* globals api */
 'use strict';
 
-var download = (entry, saveAs = false) => new Promise(resolve => api.zip.get(entry).then(blob => {
-  const url = URL.createObjectURL(blob);
-  chrome.runtime.sendMessage({
-    method: 'download',
-    url,
-    filename: entry.filename,
-    saveAs
-  }, e => {
-    if (e) {
-      api.toolbar.log.add(e + ' -> ' + entry.filename);
-    }
-    URL.revokeObjectURL(url);
-    resolve();
-  });
+var download = (entry, saveAs = false) => new Promise(resolve => chrome.runtime.sendMessage({
+  method: 'download',
+  url: entry.url,
+  filename: entry.filename,
+  saveAs
+}, e => {
+  if (e) {
+    api.toolbar.log.add(e + ' -> ' + entry.filename);
+  }
+  resolve();
 }));
 
 document.querySelector('table tbody').addEventListener('dblclick', ({target}) => {

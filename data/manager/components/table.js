@@ -9,6 +9,10 @@ table.add = (entry, filename = '') => {
   const directory = entry.directory;
 
   const tr = document.createElement('tr');
+  api.zip.get(entry).then(blob => {
+    entry.url = URL.createObjectURL(blob);
+  });
+
   tr.addEventListener('click', () => {
     tr.dataset.selected = tr.dataset.selected !== 'true';
     api.toolbar.update();
@@ -34,6 +38,12 @@ table.add = (entry, filename = '') => {
   tr.entry = entry;
 
   tr.dataset.directory = directory;
+  // drop support
+  tr.draggable = true;
+  tr.addEventListener('dragstart', e => {
+    e.dataTransfer.setData('text', 'self');
+    e.dataTransfer.setData('DownloadURL', entry.mime + ':' + entry.filename + ':' + entry.url);
+  }, false);
 
   document.querySelector('main tbody').appendChild(tr);
 };

@@ -22,7 +22,6 @@ window.open = async sources => {
   }
   clear();
   for (const source of sources) {
-    console.log(source);
     try {
       const instance = new Instance();
       instances.push(instance);
