@@ -19,14 +19,6 @@ function handleDragOver(e) {
   e.dataTransfer.dropEffect = 'none';
 }
 
-function handleDragEnter(e) {
-  e.target.classList.add('over');
-}
-
-function handleDragLeave(e) {
-  e.target.classList.remove('over');
-}
-
 function handleDrop(e) {
   e.stopPropagation();
   e.preventDefault();
@@ -39,16 +31,9 @@ function handleDrop(e) {
   return false;
 }
 
-function handleDragEnd(e) {
-  e.target.classList.remove('over');
-}
-
 drag.add = element => {
-  element.addEventListener('dragenter', handleDragEnter, false);
   element.addEventListener('dragover', handleDragOver, false);
-  element.addEventListener('dragleave', handleDragLeave, false);
   element.addEventListener('drop', handleDrop, false);
-  element.addEventListener('dragend', handleDragEnd, false);
 };
 
 drag.on = (name, callback) => {

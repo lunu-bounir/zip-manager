@@ -3,11 +3,7 @@ import api from './components/api.js';
 window.api = api;
 var instances = [];
 
-window.args = (location.search + '').substr(1).split('&').map(s => s.split('='))
-.reduce((p, [key, value]) => {
-  p[key] = decodeURIComponent(value);
-  return p;
-}, {});
+window.args = new URLSearchParams(location.search);
 
 window.open = async sources => {
   const {init, Instance} = api.zip;
@@ -26,7 +22,6 @@ window.open = async sources => {
       const instance = new Instance();
       instances.push(instance);
       const entries = await instance.open(source);
-
       entries.forEach(entry => add(entry, source.name || source));
     }
     catch(e) {
@@ -40,8 +35,8 @@ window.open = async sources => {
 api.drag.add(document.body);
 api.drag.on('drop', files => window.open(files));
 
-if (window.args.url) {
-  window.open([window.args.url]);
+if (window.args.get('url')) {
+  window.open([window.args.get('url')]);
 }
 
 api.toolbar.update();

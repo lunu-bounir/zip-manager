@@ -2,9 +2,11 @@
 
 chrome.runtime.onMessage.addListener((request, sender, response) => {
   if (request.method === 'download') {
+    console.log(request.filename);
     chrome.downloads.download({
       url: request.url,
-      filename: request.filename,
+      filename: request.filename
+        .replace(/[`~!@#$%^&*()_|+=?;:'",<>{}[\]\\/]/gi, '_'),
       saveAs: request.saveAs
     }, () => {
       const lastError = chrome.runtime.lastError;

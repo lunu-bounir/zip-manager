@@ -21,6 +21,7 @@ header {
   align-items: center;
   justify-content: flex-start;
   padding: 10px;
+  user-select: none;
 }
 header>div {
   display: flex;
@@ -53,7 +54,6 @@ main {
 main table {
   width: 100%;
   border-spacing: 0;
-  min-height: 80px;
   table-layout: fixed;
 }
 main tbody:empty::after {

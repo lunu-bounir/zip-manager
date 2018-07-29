@@ -42,7 +42,8 @@ table.add = (entry, filename = '') => {
   tr.draggable = true;
   tr.addEventListener('dragstart', e => {
     e.dataTransfer.setData('text', 'self');
-    e.dataTransfer.setData('DownloadURL', entry.mime + ':' + entry.filename + ':' + entry.url);
+    const filename = entry.filename.replace(/[`~!@#$%^&*()_|+=?;:'",<>{}[\]\\/]/gi, '_');
+    e.dataTransfer.setData('DownloadURL', entry.mime + ':' + filename + ':' + entry.url);
   }, false);
 
   document.querySelector('main tbody').appendChild(tr);
