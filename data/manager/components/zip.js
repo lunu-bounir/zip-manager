@@ -16,13 +16,13 @@ const require = src => new Promise(resolve => {
 });
 
 z.init = async () => {
-  await require('/data/manager/vendor/zip.js/WebContent/zip.js');
-  await require('/data/manager/vendor/zip.js/WebContent/zip-ext.js');
-  await require('/data/manager/vendor/zip.js/WebContent/mime-types.js');
-  const z = '/data/manager/vendor/zip.js/WebContent/z-worker.js';
+  await require('./vendor/zip.js/WebContent/zip.js');
+  await require('./vendor/zip.js/WebContent/zip-ext.js');
+  await require('./vendor/zip.js/WebContent/mime-types.js');
+  const z = './vendor/zip.js/WebContent/z-worker.js';
   zip.workerScripts = {
-    deflater: [z, '/data/manager/vendor/zip.js/WebContent/deflate.js'],
-    inflater: [z, '/data/manager/vendor/zip.js/WebContent/inflate.js']
+    deflater: [z, './vendor/zip.js/WebContent/deflate.js'],
+    inflater: [z, './vendor/zip.js/WebContent/inflate.js']
   };
 };
 
