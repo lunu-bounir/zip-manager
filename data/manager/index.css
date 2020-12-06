@@ -3,46 +3,54 @@ body {
   height: 100%;
 }
 body {
-  font-family: "Helvetica Neue",Helvetica,sans-serif;
-  font-size: 12px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin: 0;
-
   display: flex;
   flex-direction: column;
+}
+body,
+table {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 header {
   height: 80px;
   background-color: #d7d7d7;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
   padding: 10px;
   user-select: none;
+  display: grid;
+  grid-template-columns: min-content min-content 1fr;
 }
-header>div {
+header > div {
   display: flex;
   flex-direction: column;
   margin-right: 16px;
   cursor: pointer;
 }
-header>div * {
+header > div * {
   pointer-events: none;
 }
-header[data-empty=true]>div[data-cmd="extract"] {
+header[data-empty=true] > div[data-cmd="extract"] {
   opacity: 0.5;
   pointer-events: none;
 }
-header>div img {
-  width: 24px;
-  height: 24px;
+header > div img {
+  width: 28px;
+  height: 28px;
   margin: 5px;
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   padding: 10px;
+}
+.native {
+  align-self: end;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 main {
@@ -74,10 +82,16 @@ body[data-mode=parse] main tbody:empty::after {
 main th,
 main td {
   white-space: nowrap;
-  padding: 3px 5px;
+  padding: 5px;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+@media screen and (max-width: 600px) {
+  main th,
+  main td {
+    padding: 10px 5px;
+  }
 }
 main th {
   font-weight: normal;
@@ -91,10 +105,11 @@ main td {
 main th:not(:last-child)::after {
   position: absolute;
   right: 0;
+  top: 0;
   content: ' ';
   border-right: solid 1px #e5e5e5;
   display: inline;
-  height: 80%;
+  height: 100%;
   background-color: red;
 }
 main th:nth-child(2),
@@ -120,7 +135,7 @@ main tr[data-selected=true] {
 #log[data-visible=false] {
   display: none;
 }
-#log>div {
+#log > div {
   background-color: #d7d7d7;
   display: flex;
   align-items: center;
@@ -146,7 +161,7 @@ main tr[data-selected=true] {
 #log li {
   padding: 2px 10px;
   text-align: left;
-  background-color: #ffeeee;
+  background-color: #fee;
   border-top: solid 1px #ffd0d0;
   border-bottom: solid 1px #ffd0d0;
   margin-bottom: -1px;

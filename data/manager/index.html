@@ -1,9 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>ZIP Manager</title>
     <link rel="stylesheet" href="index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
   <body>
@@ -16,6 +17,7 @@
         <img src="images/extract.svg">
         <span>Extract</span>
       </div>
+      <label class="native" title="Use the native method to write files to the disk if it is supported by your browser. This method can write dotfiles and have better compatibility"><input type="checkbox" id="native">&nbsp;Use Native</label>
     </header>
     <main>
       <table>
@@ -46,8 +48,8 @@
     </div>
     <footer></footer>
 
-    <script type=module src="index.js"></script>
-    <script async src="commands.js"></script>
-    <script async src="unload.js"></script>
+    <script src="commands.js"></script>
+    <script src="unload.js"></script>
+    <script type="module" src="index.js"></script>
   </body>
 </html>

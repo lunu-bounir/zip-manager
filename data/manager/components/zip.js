@@ -9,14 +9,21 @@ const require = src => new Promise(resolve => {
     resolve();
     document.documentElement.removeChild(s);
   };
+  s.onerror = () => {
+    alert(`cannot resolve "${src}"`);
+  };
   document.documentElement.appendChild(s);
 });
 
-z.init = async() => {
+z.init = async () => {
   await require('/data/manager/vendor/zip.js/WebContent/zip.js');
   await require('/data/manager/vendor/zip.js/WebContent/zip-ext.js');
   await require('/data/manager/vendor/zip.js/WebContent/mime-types.js');
-  zip.workerScriptsPath = '/data/manager/vendor/zip.js/WebContent/';
+  const z = '/data/manager/vendor/zip.js/WebContent/z-worker.js';
+  zip.workerScripts = {
+    deflater: [z, '/data/manager/vendor/zip.js/WebContent/deflate.js'],
+    inflater: [z, '/data/manager/vendor/zip.js/WebContent/inflate.js']
+  };
 };
 
 z.get = entry => {
