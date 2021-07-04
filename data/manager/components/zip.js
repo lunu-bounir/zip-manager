@@ -16,7 +16,7 @@ const require = src => new Promise(resolve => {
 });
 
 z.init = async () => {
-  await require('./vendor/zip.js/zip-full.js');
+  await require('./vendor/zip.js/zip-fs-full.min.js');
   // await require('./vendor/zip.js/zip-fs.js');
   // await require('./vendor/zip.js/mime-types.js');
   // const z = './vendor/zip.js/z-worker.js';
@@ -30,6 +30,8 @@ z.get = entry => {
   if (z.password) {
     optns.password = z.password;
   }
+  console.log(zip.getMimeType);
+
   return entry.getData(new zip.BlobWriter(entry.mime), optns).then(b => {
     return URL.createObjectURL(b);
   })
