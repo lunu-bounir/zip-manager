@@ -14,17 +14,21 @@ document.getElementById('native').onchange = e => chrome.storage.local.set({
   native: e.target.checked
 });
 
-const download = (entry, saveAs = false) => new Promise(resolve => chrome.runtime.sendMessage({
-  method: 'download',
-  url: entry.url,
-  filename: entry.filename,
-  saveAs
-}, e => {
-  if (e) {
-    api.toolbar.log.add(e + ' -> ' + entry.filename);
-  }
-  resolve();
-}));
+const download = async (entry, saveAs = false) => {
+  const url = await entry.href();
+
+  return new Promise(resolve => chrome.runtime.sendMessage({
+    method: 'download',
+    url,
+    filename: entry.filename,
+    saveAs
+  }, e => {
+    if (e) {
+      api.toolbar.log.add(e + ' -> ' + entry.filename);
+    }
+    resolve();
+  }));
+};
 const native = async (entries, event) => {
   try {
     if (document.getElementById('native').checked === false) {
@@ -33,6 +37,7 @@ const native = async (entries, event) => {
 
     const directory = await window.showDirectoryPicker();
     for (let i = 0, j = entries.length; i < j; i += prefs.chunks) {
+      document.title = 'Please wait... (' + ((i + 1) / entries.length * 100).toFixed(0) + '%)';
       await Promise.all(entries.slice(i, i + prefs.chunks).map(async entry => {
         let cd = directory;
         const path = entry.filename.split('/');
@@ -42,7 +47,9 @@ const native = async (entries, event) => {
             create: true
           });
         }
-        const response = await fetch(entry.url);
+        const href = await entry.href();
+
+        const response = await fetch(href);
         const file = await cd.getFileHandle(filename, {
           create: true
         });
@@ -58,10 +65,16 @@ const native = async (entries, event) => {
   }
   catch (e) {
     console.warn(e);
-    for (let i = 0, j = entries.length; i < j; i += prefs.chunks) {
-      await Promise.all(entries.slice(i, i + prefs.chunks).map(entry => download(entry, event.metaKey)));
+    try {
+      for (let i = 0, j = entries.length; i < j; i += prefs.chunks) {
+        await Promise.all(entries.slice(i, i + prefs.chunks).map(entry => download(entry, event.metaKey)));
+      }
+    }
+    catch (e) {
+      api.toolbar.log.add(e);
     }
   }
+  document.title = chrome.runtime.getManifest().name;
 };
 
 // dblclick
@@ -100,5 +113,8 @@ document.addEventListener('click', async e => {
   }
   else if (cmd === 'hide.log') {
     document.getElementById('log').dataset.visible = false;
+  }
+  else if (cmd === 'reload') {
+    location.reload();
   }
 });

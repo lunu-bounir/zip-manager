@@ -16,18 +16,23 @@ const require = src => new Promise(resolve => {
 });
 
 z.init = async () => {
-  await require('./vendor/zip.js/WebContent/zip.js');
-  await require('./vendor/zip.js/WebContent/zip-ext.js');
-  await require('./vendor/zip.js/WebContent/mime-types.js');
-  const z = './vendor/zip.js/WebContent/z-worker.js';
-  zip.workerScripts = {
-    deflater: [z, './vendor/zip.js/WebContent/deflate.js'],
-    inflater: [z, './vendor/zip.js/WebContent/inflate.js']
-  };
+  await require('./vendor/zip.js/zip-full.js');
+  // await require('./vendor/zip.js/zip-fs.js');
+  // await require('./vendor/zip.js/mime-types.js');
+  // const z = './vendor/zip.js/z-worker.js';
+  // zip.workerScripts = {
+  //   deflater: [z, './vendor/zip.js/deflate.js'],
+  //   inflater: [z, './vendor/zip.js/inflate.js']
+  // };
 };
-
 z.get = entry => {
-  return new Promise(resolve => entry.getData(new zip.BlobWriter(entry.mime), resolve));
+  const optns = {};
+  if (z.password) {
+    optns.password = z.password;
+  }
+  return entry.getData(new zip.BlobWriter(entry.mime), optns).then(b => {
+    return URL.createObjectURL(b);
+  })
 };
 
 class Instance {
@@ -36,21 +41,21 @@ class Instance {
     return new Promise((resolve, reject) => {
       document.body.dataset.mode = 'parse';
       const input = new zip[typeof source === 'string' ? 'HttpReader' : 'BlobReader'](source);
-      zip.createReader(input, reader => {
-        this.reader = reader;
-        reader.getEntries(entries => {
-          document.body.dataset.mode = 'ready';
-          resolve(entries.map(entry => Object.assign(entry, {
-            mime: zip.getMimeType(entry.filename)
-          })));
-        });
-      }, e => reject(e));
+      this.reader = input;
+
+      (new zip.ZipReader(input)).getEntries({}).then(entries => {
+        document.body.dataset.mode = 'ready';
+        resolve(entries.map(entry => Object.assign(entry, {
+          mime: zip.getMimeType(entry.filename),
+          href() {
+            return z.get(entry);
+          }
+        })));
+      }).catch(reject);
     });
   }
   close() {
-    return new Promise(resolve => {
-      this.reader.close(resolve);
-    });
+    return Promise.resolve();
   }
 }
 

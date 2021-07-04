@@ -2,15 +2,33 @@
 
 chrome.runtime.onMessage.addListener((request, sender, response) => {
   if (request.method === 'download') {
-    chrome.downloads.download({
+    const d = (filename, c) => chrome.downloads.download({
       url: request.url,
-      filename: request.filename
-        .replace(/[`~!@#$%^&*()_|+=?;:'",<>{}[\]\\/]/gi, '_'),
+      filename,
       saveAs: request.saveAs
     }, () => {
       const lastError = chrome.runtime.lastError;
-      response(lastError ? lastError.message : '');
+      c(lastError);
     });
+
+    d(request.filename, lastError => {
+      if (lastError) {
+        d(request.filename.replace(/[`~!@#$%^&*()_|+=?;:'",<>{}[\]\\]/gi, '_'), lastError => {
+          if (lastError) {
+            d('unknown', () => {
+              response(lastError.message);
+            });
+          }
+          else {
+            response('');
+          }
+        });
+      }
+      else {
+        response('');
+      }
+    });
+
     return true;
   }
   else if (request.method === 'resize') {
@@ -103,10 +121,11 @@ chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl}) => {
         if (reason === 'install' || (prefs.faqs && reason === 'update')) {
           const doUpdate = (Date.now() - prefs['last-update']) / 1000 / 60 / 60 / 24 > 45;
           if (doUpdate && previousVersion !== version) {
-            tabs.create({
+            tabs.query({active: true, currentWindow: true}, tbs => tabs.create({
               url: page + '?version=' + version + (previousVersion ? '&p=' + previousVersion : '') + '&type=' + reason,
-              active: reason === 'install'
-            });
+              active: reason === 'install',
+              ...(tbs && tbs.length && {index: tbs[0].index + 1})
+            }));
             storage.local.set({'last-update': Date.now()});
           }
         }

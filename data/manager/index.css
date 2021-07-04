@@ -22,7 +22,7 @@ header {
   padding: 10px;
   user-select: none;
   display: grid;
-  grid-template-columns: min-content min-content 1fr;
+  grid-template-columns: min-content min-content min-content 1fr;
 }
 header > div {
   display: flex;

@@ -23,6 +23,12 @@ window.open = async sources => {
       instances.push(instance);
       const entries = await instance.open(source);
       entries.forEach(entry => add(entry, source.name || source));
+
+      const encrypted = entries.some(e => e.encrypted);
+
+      if (encrypted) {
+        api.zip.password = prompt('This archive is encrypted. Please enter the password', '');
+      }
     }
     catch(e) {
       api.toolbar.log.add(e);

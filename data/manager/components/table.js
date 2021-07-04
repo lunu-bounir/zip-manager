@@ -9,9 +9,6 @@ table.add = (entry, filename = '') => {
   const directory = entry.directory;
 
   const tr = document.createElement('tr');
-  api.zip.get(entry).then(blob => {
-    entry.url = URL.createObjectURL(blob);
-  });
 
   tr.addEventListener('click', () => {
     tr.dataset.selected = tr.dataset.selected !== 'true';
