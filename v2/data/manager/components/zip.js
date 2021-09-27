@@ -1,6 +1,7 @@
 /* globals zip */
 
 const z = {};
+const isFirefox = /Firefox/.test(navigator.userAgent) || typeof InstallTrigger !== 'undefined';
 
 const require = src => new Promise(resolve => {
   const s = document.createElement('script');
@@ -16,7 +17,7 @@ const require = src => new Promise(resolve => {
 });
 
 z.init = async () => {
-  await require('./vendor/zip.js/zip-fs-full.min.js');
+  await require('./vendor/zip.js/zip-fs-full.js');
   // await require('./vendor/zip.js/zip-fs.js');
   // await require('./vendor/zip.js/mime-types.js');
   // const z = './vendor/zip.js/z-worker.js';
@@ -24,13 +25,15 @@ z.init = async () => {
   //   deflater: [z, './vendor/zip.js/deflate.js'],
   //   inflater: [z, './vendor/zip.js/inflate.js']
   // };
+  zip.configure({
+    useWebWorkers: isFirefox ? false : true
+  });
 };
 z.get = entry => {
   const optns = {};
   if (z.password) {
     optns.password = z.password;
   }
-  console.log(zip.getMimeType);
 
   return entry.getData(new zip.BlobWriter(entry.mime), optns).then(b => {
     return URL.createObjectURL(b);

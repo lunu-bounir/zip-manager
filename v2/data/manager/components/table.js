@@ -20,7 +20,6 @@ table.add = (entry, filename = '') => {
   const size = document.createElement('td');
   size.textContent = directory ? '' : api.humanFileSize(entry.uncompressedSize);
   const date = document.createElement('td');
-  console.log(entry);
   date.textContent = directory ? '' : (new Date(entry.rawLastModDate)).toLocaleString();
   const type = document.createElement('td');
   type.title = type.textContent = directory ? 'Directory' : entry.mime;
