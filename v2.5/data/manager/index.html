@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ZIP Manager</title>
+    <link rel="stylesheet" href="index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <header>
+      <div data-cmd="open" title="Browse to open a local ZIP archive">
+        <img src="images/open.svg">
+        <span>Open</span>
+      </div>
+      <div data-cmd="extract" title="Extract all or selected files. Use Ctrl or Command key to select the destination directory">
+        <img src="images/extract.svg">
+        <span>Extract</span>
+      </div>
+      <div data-cmd="reload" title="Reload the interface to start over">
+        <img src="images/reload.svg">
+        <span>Reload</span>
+      </div>
+      <label class="native" title="Use the native method to write files to the disk if it is supported by your browser. This method can write dotfiles and have better compatibility"><input type="checkbox" id="native">&nbsp;Use Native</label>
+    </header>
+    <main>
+      <table>
+        <colgroup>
+          <col>
+          <col width=10%>
+          <col width=20% align="right">
+          <col width=20%>
+          <col width=10%>
+        </colgroup>
+        <thead>
+          <tr>
+            <th data-id=name>Name</th>
+            <th data-id="size">Size</th>
+            <th data-id="date">Date Modified</th>
+            <th data-id="kind">Kind</th>
+            <th data-id="parent">Parent</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </main>
+    <div id="log" data-visible=false>
+      <div>
+        <input type="button" value="×" data-cmd="hide.log">
+      </div>
+      <ul></ul>
+    </div>
+    <footer></footer>
+
+    <script src="commands.js"></script>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

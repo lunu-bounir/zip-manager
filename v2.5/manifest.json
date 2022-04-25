@@ -1,15 +1,13 @@
 {
-  "manifest_version": 3,
-  "version": "0.2.1",
+  "manifest_version": 2,
+  "version": "0.2.0",
   "name": "ZIP Manager",
   "description": "__MSG_description__",
   "default_locale": "en",
   "permissions": [
     "storage",
     "downloads",
-    "contextMenus"
-  ],
-  "host_permissions": [
+    "contextMenus",
     "*://*/*"
   ],
   "offline_enabled": true,
@@ -21,7 +19,7 @@
     "128": "data/icons/128.png",
     "256": "data/icons/256.png"
   },
-  "action": {},
+  "browser_action": {},
   "homepage_url": "https://add0n.com/zip-manager.html",
   "background": {
     "service_worker": "worker.js"
@@ -30,6 +28,8 @@
     "pages": ["data/sandbox/index.html"]
   },
   "commands": {
-    "_execute_action": {}
+    "_execute_action": {
+      "description": "Press the action button"
+    }
   }
 }

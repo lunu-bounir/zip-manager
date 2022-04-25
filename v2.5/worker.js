@@ -1,7 +1,7 @@
 'use strict';
 
 const onCommand = async (url = '') => {
-  const win = await chrome.windows.getCurrent();
+  const win = await new Promise(resolve => chrome.windows.getCurrent(resolve));
 
   chrome.storage.local.get({
     mode: 'window',
@@ -28,7 +28,7 @@ const onCommand = async (url = '') => {
   });
 };
 
-chrome.action.onClicked.addListener(() => onCommand());
+chrome.browserAction.onClicked.addListener(() => onCommand());
 
 {
   const onStartup = () => {
@@ -40,15 +40,15 @@ chrome.action.onClicked.addListener(() => onCommand());
         id: 'mode.window',
         title: 'Window Mode',
         checked: prefs.mode === 'window',
-        contexts: ['action']
-      }, () => chrome.runtime.lastError);
+        contexts: ['browser_action']
+      });
       chrome.contextMenus.create({
         type: 'radio',
         id: 'mode.tab',
         title: 'Tab Mode',
         checked: prefs.mode !== 'window',
-        contexts: ['action']
-      }, () => chrome.runtime.lastError);
+        contexts: ['browser_action']
+      });
       chrome.contextMenus.create({
         type: 'normal',
         id: 'link.zip',
@@ -56,7 +56,7 @@ chrome.action.onClicked.addListener(() => onCommand());
         contexts: ['link'],
         targetUrlPatterns: ['7z', 'apk', 'dmg', 'iso', 'pkg', 'rar', 'tar', 'zip', 'gz'].map(a => `*://*/*.${a}*`),
         documentUrlPatterns: ['*://*/*']
-      }, () => chrome.runtime.lastError);
+      });
     });
   };
   chrome.runtime.onInstalled.addListener(onStartup);
