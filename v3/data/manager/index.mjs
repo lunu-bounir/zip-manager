@@ -1,7 +1,7 @@
 import api from './components/api.js';
 
 window.api = api;
-var instances = [];
+const instances = [];
 
 window.args = new URLSearchParams(location.search);
 
@@ -11,7 +11,7 @@ window.open = async sources => {
 
   if (instances.length) {
     instances.forEach(instance => instance.close());
-    instances = [];
+    instances.length = 0;
   }
   clear();
   for (const source of sources) {
@@ -32,7 +32,7 @@ window.open = async sources => {
         api.zip.password = prompt('This archive is encrypted. Please enter the password', '');
       }
     }
-    catch(e) {
+    catch (e) {
       document.body.dataset.mode = '';
       console.warn(e);
       api.toolbar.log.add(e);
@@ -59,3 +59,10 @@ window.addEventListener('resize', () => chrome.storage.local.set({
   width: Math.max(window.outerWidth, 300),
   height: Math.max(window.outerHeight, 300)
 }));
+
+// links
+for (const a of [...document.querySelectorAll('[data-href]')]) {
+  if (a.hasAttribute('href') === false) {
+    a.href = chrome.runtime.getManifest().homepage_url + '#' + a.dataset.href;
+  }
+}

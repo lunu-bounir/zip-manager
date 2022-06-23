@@ -50,6 +50,16 @@ chrome.action.onClicked.addListener(() => onCommand());
         contexts: ['action']
       }, () => chrome.runtime.lastError);
       chrome.contextMenus.create({
+        id: 's1',
+        contexts: ['action'],
+        type: 'separator'
+      }, () => chrome.runtime.lastError);
+      chrome.contextMenus.create({
+        id: 'sample',
+        title: 'Test ZIP Manager',
+        contexts: ['action']
+      }, () => chrome.runtime.lastError);
+      chrome.contextMenus.create({
         type: 'normal',
         id: 'link.zip',
         title: 'Open with ZIP Manager',
@@ -62,7 +72,7 @@ chrome.action.onClicked.addListener(() => onCommand());
   chrome.runtime.onInstalled.addListener(onStartup);
   chrome.runtime.onStartup.addListener(onStartup);
 }
-chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl}) => {
+chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl}, tab) => {
   if (menuItemId.startsWith('mode.')) {
     chrome.storage.local.set({
       mode: menuItemId.replace('mode.', '')
@@ -70,6 +80,12 @@ chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl}) => {
   }
   else if (menuItemId === 'link.zip') {
     onCommand(linkUrl);
+  }
+  else if (menuItemId === 'sample') {
+    chrome.tabs.create({
+      url: 'https://webbrowsertools.com/test-download-with/',
+      index: tab.index + 1
+    });
   }
 });
 

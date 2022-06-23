@@ -16,19 +16,27 @@ table {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+a {
+  color: #0054b6;
+  text-decoration: none;
+}
 header {
   height: 80px;
   background-color: #d7d7d7;
   padding: 10px;
   user-select: none;
   display: grid;
-  grid-template-columns: min-content min-content min-content 1fr;
+  grid-gap: 10px;
+  grid-template-columns: repeat(3, min-content) 1fr;
+}
+body.rating header {
+  grid-template-columns: repeat(4, min-content) 1fr;
 }
 header > div {
   display: flex;
   flex-direction: column;
-  margin-right: 16px;
   cursor: pointer;
+  align-items: center;
 }
 header > div * {
   pointer-events: none;
@@ -51,6 +59,8 @@ header > div img {
   display: flex;
   align-items: center;
   justify-content: center;
+  grid-column: -1;
+  white-space: nowrap;
 }
 
 main {
@@ -189,5 +199,9 @@ footer {
 }
 
 iframe.zip {
+  display: none;
+}
+
+#rate.hidden {
   display: none;
 }

@@ -37,7 +37,10 @@ const native = async (entries, event) => {
       throw Error('per user request');
     }
 
-    const directory = await window.showDirectoryPicker();
+    const directory = await window.showDirectoryPicker({
+      id: 'zip-manager',
+      mode: 'readwrite'
+    });
     for (let i = 0, j = entries.length; i < j; i += 1) {
       const entry = entries[i];
 

@@ -21,7 +21,11 @@
         <img src="images/reload.svg">
         <span>Reload</span>
       </div>
-      <label class="native" title="Use the native method to write files to the disk if it is supported by your browser. This method can write dotfiles and have better compatibility"><input type="checkbox" id="native">&nbsp;Use Native</label>
+      <div data-cmd="rate" title="Rate Me" id="rate" class="hidden">
+        <img src="images/rate.svg">
+        <span>Rate</span>
+      </div>
+      <label class="native"><input type="checkbox" id="native">&nbsp;Use&nbsp;<a data-href="faq8" target="_blank">Native</a></label>
     </header>
     <main>
       <table>
@@ -53,6 +57,7 @@
     <footer></footer>
 
     <script src="commands.js"></script>
-    <script type="module" src="index.js"></script>
+    <script type="module" src="index.mjs"></script>
+    <script src="rate.js"></script>
   </body>
 </html>

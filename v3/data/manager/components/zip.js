@@ -2,6 +2,59 @@
 
 const z = {};
 
+const MIME_TYPES = {
+  'image/jpeg': 'jpg',
+  'application/x-javascript': 'js',
+  'application/atom+xml': 'atom',
+  'application/rss+xml': 'rss',
+  'text/plain': 'txt',
+  'text/javascript': 'js',
+  'image/x-icon': 'ico',
+  'image/x-ms-bmp': 'bmp',
+  'image/svg+xml': 'svg',
+  'application/java-archive': 'jar',
+  'application/msword': 'doc',
+  'application/postscript': 'ps',
+  'application/vnd.ms-excel': 'xls',
+  'application/vnd.ms-powerpoint': 'ppt',
+  'application/x-7z-compressed': '7z',
+  'application/x-rar-compressed': 'rar',
+  'application/x-shockwave-flash': 'swf',
+  'application/x-xpinstall': 'xpi',
+  'application/xhtml+xml': 'xhtml',
+  'application/octet-stream': 'bin',
+  'application/binary': 'exe',
+  'audio/mpeg': 'mp3',
+  'audio/mpegurl': 'm3u8',
+  'video/3gpp': '3gp',
+  'video/mpeg': 'mpg',
+  'video/quicktime': 'mov',
+  'video/x-flv': 'flv',
+  'video/x-mng': 'mng',
+  'video/x-ms-asf': 'asf',
+  'video/x-ms-wmv': 'wmv',
+  'video/x-msvideo': 'avi'
+};
+
+function guess(resp, meta = {}) {
+  const href = resp.url.split('#')[0].split('?')[0];
+  if (href.startsWith('data:')) {
+    const mime = href.split('data:')[1].split(';')[0];
+    meta.ext = (MIME_TYPES[mime] || mime.split('/')[1] || '').split(';')[0];
+    meta.name = 'unknown';
+    meta.mime = mime;
+  }
+  else {
+    const fe = (href.substring(href.lastIndexOf('/') + 1) || 'unknown').slice(-100);
+
+    const e = /(.+)\.([^.]{1,5})*$/.exec(fe);
+
+    meta.name = e ? e[1] : fe;
+    meta.mime = resp.headers.get('Content-Type') || '';
+    meta.ext = e ? e[2] : (MIME_TYPES[meta.mime] || meta.mime.split('/')[1] || '').split(';')[0];
+  }
+}
+
 window.addEventListener('message', e => {
   const request = e.data;
 
@@ -22,6 +75,11 @@ window.addEventListener('message', e => {
     else {
       fetch(z[request.id].source).then(async r => {
         if (r.ok) {
+          const meta = {};
+          guess(r, meta);
+          const name = meta.name ? (meta.name + (meta.ext ? '.' + meta.ext : '')) : 'noname';
+          const total = r.headers.get('Content-Length');
+
           const reader = r.body.getReader();
           const chunks = [];
           let size = 0;
@@ -32,13 +90,20 @@ window.addEventListener('message', e => {
             }
             chunks.push(value);
             size += value.length;
-            document.title = 'Receiving ' + api.humanFileSize(size) + '...';
+            let msg = 'Receiving ' + api.humanFileSize(size);
+            if (total) {
+              msg += ' / ' + api.humanFileSize(total);
+              msg += ' [' + (size / total * 100).toFixed(1) + '%]';
+            }
+            msg += '...';
+
+            document.title = msg;
           }
           const b = new Blob(chunks);
           z[request.id].iframe.contentWindow.postMessage({
             method: 'resource',
             value: await b.arrayBuffer(),
-            name: 'noname'
+            name
           }, '*');
           z[request.id].resolve();
         }
