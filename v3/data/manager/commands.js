@@ -1,26 +1,41 @@
-/* globals api */
+/* global api */
 'use strict';
 
 const prefs = {
   chunks: 4,
-  native: 'showDirectoryPicker' in window
+  method: 'native'
 };
+
+if ('showDirectoryPicker' in window) {
+  document.getElementById('native').disabled = true;
+}
+else {
+  if (prefs.method === 'native') {
+    prefs.method = 'download';
+  }
+}
 
 chrome.storage.local.get(prefs, ps => {
   Object.assign(prefs, ps);
-  document.getElementById('native').checked = prefs.native;
+  document.getElementById('native').checked = prefs.method === 'native';
+  document.getElementById('download').checked = prefs.method === 'download';
+  document.getElementById('tab').checked = prefs.method === 'tab';
 });
-document.getElementById('native').onchange = e => chrome.storage.local.set({
-  native: e.target.checked
+document.getElementById('method').onchange = e => chrome.storage.local.set({
+  method: e.target.id
 });
 
-const download = async (entry, saveAs = false) => {
+const entry2blob = async entry => {
   const ab = await entry.instance.extract(entry.Path);
   const {mime} = await entry.instance.info(entry.Path);
 
-  const b = new Blob([ab], {
+  return new Blob([ab], {
     type: mime
   });
+};
+
+const download = async (entry, saveAs = false) => {
+  const b = await entry2blob(entry);
   const url = URL.createObjectURL(b);
 
   return api.download({
@@ -28,15 +43,42 @@ const download = async (entry, saveAs = false) => {
     filename: entry.Path,
     saveAs
   }).catch(e => api.toolbar.log.add(e + ' -> ' + entry.filename)).finally(() => {
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), /Firefox/.test(navigator.userAgent) ? 30000 : 0);
   });
 };
+
+const decide = async (entries, event) => {
+  if (document.getElementById('download').checked) {
+    try {
+      for (let i = 0, j = entries.length; i < j; i += 1) {
+        await download(entries[i], event.metaKey);
+      }
+    }
+    catch (e) {
+      api.toolbar.log.add(e);
+    }
+  }
+  else if (document.getElementById('native').checked) {
+    native(entries, event);
+  }
+  else {
+    if (entries.length > 5) {
+      if (confirm(`Are you sure you want to open ${entries.length} new tabs?`) !== true) {
+        throw Error('UserAbort');
+      }
+    }
+    for (const entry of entries) {
+      const b = await entry2blob(entry);
+      const url = URL.createObjectURL(b);
+      chrome.tabs.create({
+        url
+      });
+    }
+  }
+};
+
 const native = async (entries, event) => {
   try {
-    if (document.getElementById('native').checked === false) {
-      throw Error('per user request');
-    }
-
     const directory = await window.showDirectoryPicker({
       id: 'zip-manager',
       mode: 'readwrite'
@@ -88,7 +130,7 @@ const native = async (entries, event) => {
   const dblclick = ({target, metaKey}) => {
     const entry = target.parentNode.entry;
     if (entry) {
-      native([entry], {metaKey});
+      decide([entry], {metaKey});
     }
   };
   const root = document.querySelector('table tbody');
@@ -104,12 +146,12 @@ const native = async (entries, event) => {
   });
 }
 
-document.addEventListener('click', async e => {
+document.addEventListener('click', e => {
   const cmd = e.target.dataset.cmd;
 
   if (cmd === 'extract') {
     const entries = api.table.entries();
-    native(entries, e);
+    decide(entries, e);
   }
   else if (cmd === 'open') {
     const input = document.createElement('input');

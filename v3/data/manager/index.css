@@ -29,16 +29,43 @@ header {
   grid-gap: 10px;
   grid-template-columns: repeat(3, min-content) 1fr;
 }
+
+@media screen and (max-width: 600px) {
+  header {
+    grid-template-columns: repeat(3, min-content);
+    height: unset;
+  }
+  #method {
+    grid-column: 1/6;
+    width: 100% !important;
+    align-self: start !important;
+    justify-self: start !important;
+  }
+  #method label {
+    flex-grow: 1;
+  }
+}
+
 body.rating header {
   grid-template-columns: repeat(4, min-content) 1fr;
 }
+
+@media screen and (max-width: 600px) {
+  body.rating header {
+    grid-template-columns: repeat(4, min-content);
+    height: unset;
+  }
+}
+
 header > div {
   display: flex;
   flex-direction: column;
-  cursor: pointer;
   align-items: center;
 }
-header > div * {
+header > div:not(#method) {
+  cursor: pointer;
+}
+header > div:not(#method) * {
   pointer-events: none;
 }
 header[data-empty=true] > div[data-cmd="extract"] {
@@ -53,16 +80,6 @@ header > div img {
   border-radius: 50%;
   padding: 10px;
 }
-.native {
-  align-self: end;
-  justify-self: end;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  grid-column: -1;
-  white-space: nowrap;
-}
-
 main {
   flex: 1;
   position: relative;
@@ -204,4 +221,43 @@ iframe.zip {
 
 #rate.hidden {
   display: none;
+}
+
+#method {
+  display: flex;
+  flex-direction: row;
+  gap: 2ch;
+  border: solid 1px rgba(0, 0, 0, 0.1);
+  height: min-content;
+  align-self: center;
+  width: fit-content;
+  justify-self: end;
+}
+#method input {
+  display: none;
+}
+#method label {
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+}
+#method input:checked + label {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+#method input:disabled + label {
+  opacity: 0.5;
+  pointer-events: none;
+}
+#method label:not(:last-child)::after {
+  content: '●';
+  color: rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  position: absolute;
+  width: 2ch;
+  height: 100%;
+  right: -2ch;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
