@@ -1,4 +1,4 @@
-/* globals api */
+/* global api */
 
 const toolbar = {};
 
@@ -24,8 +24,10 @@ toolbar.log.add = (msg = 'no message') => {
   li.appendChild(content);
   document.querySelector('#log ul').appendChild(li);
   document.getElementById('log').dataset.visible = true;
+  li.scrollIntoView();
 };
 toolbar.log.hide = () => {
   document.getElementById('log').dataset.visible = false;
 };
+
 export default toolbar;

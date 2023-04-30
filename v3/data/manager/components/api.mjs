@@ -1,7 +1,7 @@
-import z from './zip.js';
-import table from './table.js';
-import toolbar from './toolbar.js';
-import drag from './drag.js';
+import z from './zip.mjs';
+import table from './table.mjs';
+import toolbar from './toolbar.mjs';
+import drag from './drag.mjs';
 
 const api = {};
 
@@ -45,7 +45,7 @@ api.download = request => new Promise((resolve, reject) => {
       resolve();
     }
   });
-})
+});
 
 export default api;
 

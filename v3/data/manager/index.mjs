@@ -1,4 +1,4 @@
-import api from './components/api.js';
+import api from './components/api.mjs';
 
 window.api = api;
 const instances = [];
@@ -38,7 +38,12 @@ window.open = async sources => {
       api.toolbar.log.add(e);
     }
   }
-  document.title = chrome.runtime.getManifest().name;
+
+  const last = sources.at(-1);
+  document.title = 'ZIP Manager';
+  if (last) {
+    document.title = (last.name || last).split('/').pop() + ' :: ' + document.title;
+  }
 
   api.toolbar.update();
 };

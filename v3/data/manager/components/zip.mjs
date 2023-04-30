@@ -1,4 +1,4 @@
-/* globals zip */
+/* global api */
 
 const z = {};
 
@@ -70,6 +70,10 @@ window.addEventListener('message', e => {
         delete z[request.id].source;
         z[request.id].resolve();
       };
+      r.onerror = e => {
+        z[request.id].reject(Error(e.target.error));
+        delete z[request.id].source;
+      };
       r.readAsArrayBuffer(z[request.id].source);
     }
     else {
@@ -83,7 +87,7 @@ window.addEventListener('message', e => {
           const reader = r.body.getReader();
           const chunks = [];
           let size = 0;
-          while(true) {
+          while (true) {
             const {done, value} = await reader.read();
             if (done) {
               break;

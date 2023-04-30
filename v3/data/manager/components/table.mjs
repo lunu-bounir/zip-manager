@@ -1,4 +1,4 @@
-/* globals api */
+/* global api */
 const table = {};
 
 table.clear = () => {
@@ -56,13 +56,12 @@ table.add = (entry, filename = '') => {
 
   tr.dataset.directory = directory;
   // drop support
-  tr.addEventListener('dragstart', async e => {
+  tr.addEventListener('dragstart', e => {
     e.dataTransfer.setData('text', 'self');
     e.dataTransfer.setData('DownloadURL', e.target.dataset.href);
   }, false);
 
   if (directory !== true) {
-    console.log(entry);
     const id = entry.Path.split('/').slice(0, -1).join('/');
     const e = document.querySelector(`[data-id="${id}"] ~ [data-id]`);
     const v = document.querySelector(`[data-id="${id}"]`);

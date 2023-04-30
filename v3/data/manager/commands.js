@@ -7,7 +7,7 @@ const prefs = {
 };
 
 if ('showDirectoryPicker' in window) {
-  document.getElementById('native').disabled = true;
+  document.getElementById('native').disabled = false;
 }
 else {
   if (prefs.method === 'native') {
@@ -156,6 +156,7 @@ document.addEventListener('click', e => {
   else if (cmd === 'open') {
     const input = document.createElement('input');
     input.type = 'file';
+    input.multiple = true;
     input.addEventListener('change', e => api.drag.emit('drop', [...e.target.files]));
     input.click();
   }

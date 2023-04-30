@@ -41,9 +41,7 @@ import('./7z-wasm/7zz.es6.js').then(async o => {
           }
         }
         if (m) {
-          console.log(m);
           buffer.push(...(m + '\n').split(''));
-          console.log(buffer);
           const c = buffer.shift();
           return c.charCodeAt(0);
         }
@@ -67,45 +65,53 @@ window.addEventListener('message', e => {
     sevenZip.FS.close(stream);
   }
   else if (request.method === 'list') {
-    sevenZip.callMain(['l', '-ba', '-slt', name]);
-    const entries = [];
-    const o = {};
+    try {
+      sevenZip.callMain(['l', '-ba', '-slt', name]);
+      const entries = [];
+      const o = {};
 
-    if (stderr) {
-      top.postMessage({
-        method: 'list',
-        id: args.get('id'),
-        error: stderr.trim()
-      }, '*');
-    }
-    else {
-      console.log(stdout);
-      stdout.trimStart().split('\n').forEach(s => {
-        const [name, value] = s.split(' = ');
-        if (name) {
-          if (name === 'Package Size' || name === 'Size') {
-            o[name] = Number(value);
+      if (stderr) {
+        top.postMessage({
+          method: 'list',
+          id: args.get('id'),
+          error: stderr.trim()
+        }, '*');
+      }
+      else {
+        stdout.trimStart().split('\n').forEach(s => {
+          const [name, value] = s.split(' = ');
+          if (name) {
+            if (name === 'Package Size' || name === 'Size') {
+              o[name] = Number(value);
+            }
+            else {
+              o[name] = value;
+            }
           }
           else {
-            o[name] = value;
+            o.directory = o?.Attributes?.startsWith('D') || false;
+            entries.push({
+              ...o
+            });
           }
-        }
-        else {
-          o.directory = o?.Attributes?.startsWith('D') || false;
-          entries.push({
-            ...o
-          });
-        }
-      });
-      console.log(entries);
+        });
+        top.postMessage({
+          method: 'list',
+          id: args.get('id'),
+          entries: entries.slice(0, -1)
+        }, '*');
+      }
+      stdout = '';
+      stderr = '';
+    }
+    catch (e) {
+      console.error(e);
       top.postMessage({
         method: 'list',
         id: args.get('id'),
-        entries: entries.slice(0, -1)
+        error: e.message || e
       }, '*');
     }
-    stdout = '';
-    stderr = '';
   }
   else if (request.method === 'extract') {
     try {

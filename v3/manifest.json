@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "version": "0.2.3",
-  "name": "ZIP Manager",
+  "version": "0.2.4",
+  "name": "ZIP Manager (zip, rar, 7z)",
   "description": "__MSG_description__",
   "default_locale": "en",
   "permissions": [
@@ -22,7 +22,7 @@
     "256": "data/icons/256.png"
   },
   "action": {},
-  "homepage_url": "https://add0n.com/zip-manager.html",
+  "homepage_url": "https://webextension.org/listing/zip-manager.html",
   "background": {
     "service_worker": "worker.js"
   },

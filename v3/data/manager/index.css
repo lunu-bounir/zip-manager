@@ -165,10 +165,16 @@ main tr[data-selected=true] {
   background-color: #106cd6;
 }
 
+#log {
+  display: flex;
+  flex-direction: column;
+  max-height: 30vh;
+  overflow: hidden;
+}
 #log[data-visible=false] {
   display: none;
 }
-#log > div {
+#log > div[data-id="toolbar"] {
   background-color: #d7d7d7;
   display: flex;
   align-items: center;
@@ -185,6 +191,9 @@ main tr[data-selected=true] {
   margin: 3px;
   outline: none;
   cursor: pointer;
+}
+#log > div[data-id="entries"] {
+  overflow: auto;
 }
 #log ul {
   list-style: none;
