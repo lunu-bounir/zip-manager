@@ -130,7 +130,6 @@ window.addEventListener('message', e => {
     }
   }
   else if (request.method === 'file') {
-    console.log(request);
     if (request.error) {
       z[request.id].reject(request.error);
     }
