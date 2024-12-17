@@ -55,7 +55,7 @@ function guess(resp, meta = {}) {
   }
 }
 
-window.addEventListener('message', e => {
+addEventListener('message', e => {
   const request = e.data;
 
   if (request.method === 'ready') {
@@ -87,7 +87,7 @@ window.addEventListener('message', e => {
           const reader = r.body.getReader();
           const chunks = [];
           let size = 0;
-          while (true) {
+          for (;;) {
             const {done, value} = await reader.read();
             if (done) {
               break;
@@ -139,7 +139,7 @@ window.addEventListener('message', e => {
   }
 });
 
-
+/* Instance */
 class Instance {
   constructor() {
     this.id = Math.random();

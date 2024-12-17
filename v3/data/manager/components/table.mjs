@@ -26,6 +26,7 @@ table.add = (entry, filename = '') => {
         tr.draggable = true;
       }
       catch (e) {
+        console.warn(e);
         api.toolbar.log.add(e);
       }
     }

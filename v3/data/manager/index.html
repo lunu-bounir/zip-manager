@@ -1,72 +1,72 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>ZIP Manager</title>
-    <link rel="stylesheet" href="index.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZIP Manager</title>
+  <link rel="stylesheet" href="index.css">
+</head>
 
-  <body>
-    <header>
-      <div data-cmd="open" title="Browse to open a local ZIP archive">
-        <img src="images/open.svg">
-        <span>Open</span>
-      </div>
-      <div data-cmd="extract" title="Extract all or selected files. Use Ctrl or Command key to select the destination directory">
-        <img src="images/extract.svg">
-        <span>Extract</span>
-      </div>
-      <div data-cmd="reload" title="Reload the interface to start over">
-        <img src="images/reload.svg">
-        <span>Reload</span>
-      </div>
-      <div data-cmd="rate" title="Rate Me" id="rate" class="hidden">
-        <img src="images/rate.svg">
-        <span>Rate</span>
-      </div>
-      <div id="method">
-        <input type="radio" name="method" id="native" disabled>
-        <label for="native">Use <a data-href="faq8" target="_blank">Native</a></label>
-        <input type="radio" name="method" id="download">
-        <label for="download">Download Files</label>
-        <input type="radio" name="method" id="tab">
-        <label for="tab">Open in Tab</label>
-      </div>
-    </header>
-    <main>
-      <table>
-        <colgroup>
-          <col>
-          <col width=10%>
-          <col width=20% align="right">
-          <col width=20%>
-          <col width=10%>
-        </colgroup>
-        <thead>
-          <tr>
-            <th data-id=name>Name</th>
-            <th data-id="size">Size</th>
-            <th data-id="date">Date Modified</th>
-            <th data-id="kind">Kind</th>
-            <th data-id="parent">Parent</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </main>
-    <div id="log" data-visible=false>
-      <div data-id="toolbar">
-        <input type="button" value="×" data-cmd="hide.log">
-      </div>
-      <div data-id="entries">
-        <ul></ul>
-      </div>
+<body>
+  <header>
+    <div data-cmd="open" title="Browse to open a local ZIP archive">
+      <img src="images/open.svg">
+      <span>Open</span>
     </div>
-    <footer></footer>
+    <div data-cmd="extract" title="Extract all or selected files. Use Ctrl or Command key to select the destination directory">
+      <img src="images/extract.svg">
+      <span>Extract</span>
+    </div>
+    <div data-cmd="reload" title="Reload the interface to start over">
+      <img src="images/reload.svg">
+      <span>Reload</span>
+    </div>
+    <div data-cmd="rate" title="Rate Me" id="rate" class="hidden">
+      <img src="images/rate.svg">
+      <span>Rate</span>
+    </div>
+    <div id="method">
+      <input type="radio" name="method" id="native" disabled>
+      <label for="native">Use <a data-href="faq8" target="_blank">Native</a></label>
+      <input type="radio" name="method" id="download">
+      <label for="download">Download Files</label>
+      <input type="radio" name="method" id="tab">
+      <label for="tab">Open in Tab</label>
+    </div>
+  </header>
+  <main>
+    <table>
+      <colgroup>
+        <col>
+        <col width=10%>
+        <col width=20% align="right">
+        <col width=20%>
+        <col width=10%>
+      </colgroup>
+      <thead>
+        <tr>
+          <th data-id=name>Name</th>
+          <th data-id="size">Size</th>
+          <th data-id="date">Date Modified</th>
+          <th data-id="kind">Kind</th>
+          <th data-id="parent">Parent</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+  <div id="log" data-visible=false>
+    <div data-id="toolbar">
+      <input type="button" value="×" data-cmd="hide.log">
+    </div>
+    <div data-id="entries">
+      <ul></ul>
+    </div>
+  </div>
+  <footer></footer>
 
-    <script src="commands.js"></script>
-    <script type="module" src="index.mjs"></script>
-    <script src="rate.js"></script>
-  </body>
+  <script src="commands.js"></script>
+  <script type="module" src="index.mjs"></script>
+  <script src="rate.js"></script>
+</body>
 </html>

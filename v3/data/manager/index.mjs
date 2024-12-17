@@ -58,7 +58,7 @@ if (window.args.get('url')) {
 api.toolbar.update();
 
 // resize
-window.addEventListener('resize', () => chrome.storage.local.set({
+addEventListener('resize', () => chrome.storage.local.set({
   left: window.screenX,
   top: window.screenY,
   width: Math.max(window.outerWidth, 300),

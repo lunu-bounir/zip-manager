@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "0.2.5",
+  "version": "0.2.6",
   "name": "ZIP Manager (zip, rar, 7z)",
   "description": "__MSG_description__",
   "default_locale": "en",
@@ -14,22 +14,37 @@
   ],
   "offline_enabled": true,
   "icons": {
-    "16": "data/icons/16.png",
-    "32": "data/icons/32.png",
-    "48": "data/icons/48.png",
-    "64": "data/icons/64.png",
-    "128": "data/icons/128.png",
-    "256": "data/icons/256.png"
+    "16": "/data/icons/16.png",
+    "32": "/data/icons/32.png",
+    "48": "/data/icons/48.png",
+    "64": "/data/icons/64.png",
+    "128": "/data/icons/128.png",
+    "256": "/data/icons/256.png"
   },
   "action": {},
   "homepage_url": "https://webextension.org/listing/zip-manager.html",
   "background": {
-    "service_worker": "worker.js"
+    "service_worker": "worker.js",
+    "scripts": ["worker.js"]
   },
   "sandbox": {
-    "pages": ["data/sandbox/index.html"]
+    "pages": ["/data/sandbox/index.html"]
   },
   "commands": {
     "_execute_action": {}
+  },
+
+
+
+
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{6c462069-8ae2-4a85-8563-924dd9c5897b}",
+      "strict_min_version": "128.0"
+    }
   }
 }

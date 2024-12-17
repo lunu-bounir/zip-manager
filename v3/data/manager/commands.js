@@ -55,6 +55,7 @@ const decide = async (entries, event) => {
       }
     }
     catch (e) {
+      console.warn(e);
       api.toolbar.log.add(e);
     }
   }
@@ -107,6 +108,7 @@ const native = async (entries, event) => {
         await writable.close();
       }
       catch (e) {
+        console.warn(e);
         await download(entry, event.metaKey);
       }
     }
@@ -119,6 +121,7 @@ const native = async (entries, event) => {
       }
     }
     catch (e) {
+      console.warn(e);
       api.toolbar.log.add(e);
     }
   }
