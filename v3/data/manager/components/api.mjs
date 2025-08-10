@@ -37,12 +37,12 @@ api.download = request => new Promise((resolve, reject) => {
           });
         }
         else {
-          resolve();
+          setTimeout(resolve, 300);
         }
       });
     }
     else {
-      resolve();
+      setTimeout(resolve, 300);
     }
   });
 });

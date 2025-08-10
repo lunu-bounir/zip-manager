@@ -35,6 +35,8 @@ const entry2blob = async entry => {
 };
 
 const download = async (entry, saveAs = false) => {
+  api.toolbar.notify('Downloading ' + entry.Path + '...');
+
   const b = await entry2blob(entry);
   const url = URL.createObjectURL(b);
 
@@ -42,7 +44,7 @@ const download = async (entry, saveAs = false) => {
     url,
     filename: entry.Path,
     saveAs
-  }).catch(e => api.toolbar.log.add(e + ' -> ' + entry.filename)).finally(() => {
+  }).catch(e => api.toolbar.log.add(e + ' -> ' + entry.Path)).finally(() => {
     setTimeout(() => URL.revokeObjectURL(url), /Firefox/.test(navigator.userAgent) ? 30000 : 0);
   });
 };
@@ -60,7 +62,7 @@ const decide = async (entries, event) => {
     }
   }
   else if (document.getElementById('native').checked) {
-    native(entries, event);
+    await native(entries, event);
   }
   else {
     if (entries.length > 5) {
@@ -76,6 +78,8 @@ const decide = async (entries, event) => {
       });
     }
   }
+
+  api.toolbar.notify('Done!', 3000);
 };
 
 const native = async (entries, event) => {
@@ -100,7 +104,7 @@ const native = async (entries, event) => {
       const file = await cd.getFileHandle(filename, {
         create: true
       });
-      document.title = 'Extracting ' + ((i + 1) / entries.length * 100).toFixed(0) + '% Please wait...';
+      api.toolbar.notify('Extracting ' + ((i + 1) / entries.length * 100).toFixed(0) + '% Please wait...');
       try {
         const writable = await file.createWritable();
         await writable.write(ab);
@@ -125,7 +129,6 @@ const native = async (entries, event) => {
       api.toolbar.log.add(e);
     }
   }
-  document.title = chrome.runtime.getManifest().name;
 };
 
 // dblclick

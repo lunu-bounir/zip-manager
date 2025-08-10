@@ -30,4 +30,31 @@ toolbar.log.hide = () => {
   document.getElementById('log').dataset.visible = false;
 };
 
+{
+  let id;
+  toolbar.notify = (message, timeout) => {
+    const reset = () => {
+      document.title = 'ZIP Manager';
+      if (toolbar.notify.entry) {
+        const name = (toolbar.notify.entry.name || toolbar.notify.entry).split('/').pop();
+        if (name) {
+          document.title = name + (/Firefox/.test(navigator.userAgent) ? '' : ' :: ZIP Manager');
+        }
+      }
+    };
+
+    if (message) {
+      document.title = message;
+
+      clearTimeout(id);
+      if (timeout > 0) {
+        id = setTimeout(reset, timeout);
+      }
+    }
+    else {
+      reset();
+    }
+  };
+}
+
 export default toolbar;

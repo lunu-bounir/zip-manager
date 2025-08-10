@@ -18,7 +18,7 @@ window.open = async sources => {
     try {
       const instance = new Instance();
       instances.push(instance);
-      document.title = `Opening "${source.name || source}"...`;
+      api.toolbar.notify(`Opening "${source.name || source}"...`);
       document.body.dataset.mode = 'fetch';
       await instance.open(source);
       document.body.dataset.mode = 'parse';
@@ -39,11 +39,8 @@ window.open = async sources => {
     }
   }
 
-  const last = sources.at(-1);
-  document.title = 'ZIP Manager';
-  if (last) {
-    document.title = (last.name || last).split('/').pop() + ' :: ' + document.title;
-  }
+  api.toolbar.notify.entry = sources.at(-1);
+  api.toolbar.notify();
 
   api.toolbar.update();
 };
